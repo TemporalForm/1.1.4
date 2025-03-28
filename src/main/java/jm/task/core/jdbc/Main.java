@@ -2,6 +2,8 @@ package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
+import jm.task.core.jdbc.util.Util;
+import org.hibernate.HibernateException;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,5 +16,12 @@ public class Main {
         userService.removeUserById(2);
         userService.getAllUsers();
         userService.dropUsersTable();
+        try {
+            if (Util.getSessionFactory()!= null) {
+                Util.closeSessionFactory();
+            }
+        } catch (HibernateException e) {
+            throw new RuntimeException("Произошла ошибка при попытке закрыть фабрику сессий" + e);
+        }
     }
 }
